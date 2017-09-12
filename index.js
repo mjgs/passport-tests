@@ -4,14 +4,15 @@ const session = require('express-session');
 const logger = require('morgan');
 const path = require('path');
 const bodyParser = require('body-parser');
-const csrf = require('csurf');
 const engine = require('ejs-mate');
 
 const app = express();
 
+app.set('env', process.env.NODE_ENV || 'development');
 app.set('host', process.env.HOST || 'localhost');
 app.set('port', parseInt(process.env.PORT) || 3000);
-app.set('users', require(process.env.USERS || './lib/users'));
+app.set('users', require(process.env.USERS || './lib/store/users'));
+app.set('secret', (app.get('env') === 'production') ? process.env.SECRET : 'secret');
 
 module.exports = app;
 
@@ -37,26 +38,12 @@ app.use(session({
 app.use(passport.initialize({ userProperty: 'authenticatedUser' }));
 app.use(passport.session());
 
-app.param('username', middleware.loadUser);
-
 app.use(middleware.setVariables([
   'authenticated',
   'authenticatedUsername'
 ]));
 
-const csrfProtection = csrf();
-
-app.route('/')
-  .get(controllers.homepage);
-
-app.route('/login')
-  .get(csrfProtection, controllers.login)
-  .post(csrfProtection, passport.authenticate('local'), controllers.processLogin);
-
-app.route('/users/:username')
-  .get(middleware.ensureAuthenticated(), controllers.profile);
-
-app.route('/logout')
-  .get(controllers.logout);
+app.use('/', require('./lib/routes/website'));
+app.use('/api', require('./lib/routes/api'));
 
 app.use(middleware.handleError);
