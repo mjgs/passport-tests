@@ -1,0 +1,29 @@
+<style>
+  input, button {
+    display: block;
+    margin: 2em;
+  }
+</style>
+Logged in: <%= authenticated || false %>
+
+<br><br>
+
+<a name="home" href="/">home page</a><br>
+
+<a name="login" href="/login">login page</a><br>
+
+<% if (authenticated) { %>
+<a name="profile" href="/users/<%= authenticatedUsername %>">profile page</a><br>
+<% } %>
+
+<% if (authenticated) { %>
+<a name="logout" href="/logout">logout</a><br>
+<% } %>
+
+<br><br>
+
+<%- body %>
+
+<br><br>
+
+<a href="https://github.com/mjgs/passport-tests">github</a><br>

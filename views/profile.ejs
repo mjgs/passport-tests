@@ -1,0 +1,10 @@
+<%= message %>
+
+<br><br>
+
+<ul>
+  <% Object.keys(user).forEach(function(prop) { %>
+  <li><%= prop %>: <%= user[prop] %></li>
+  <% }); %>
+</ul>
+
