@@ -79,7 +79,7 @@ function hasLoginForm($) {
   expect(form.find('button')[0].attribs.type).to.be.equal('submit');
 }
 
-describe('Integration tests: authenticated', function() {
+describe('Integration tests: website: authenticated', function() {
   let agent;
 
   // Log the user in
@@ -316,7 +316,7 @@ describe('Integration tests: authenticated', function() {
   });
 });
 
-describe('Integration tests: non-authenticated', function() {
+describe('Integration tests: website: non-authenticated', function() {
   it('should render the home page', function(done) {
     // Page displays text 'Logged in: false'
     // Page displays text 'This is the home page'
