@@ -1,7 +1,7 @@
 {
   "name": "passport-tests",
   "version": "1.0.0",
-  "description": "Express app that demonstrates a basic passport local flow.",
+  "description": "Express app that implements just the passport basics on a minimal website and api",
   "main": "app.js",
   "scripts": {
     "start": "node bin/website",
