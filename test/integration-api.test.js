@@ -13,12 +13,18 @@ function encodeCredentials(username, password) {
 
 function validateListOfUsers(list) {
   list.forEach(function(item) {
-    validateUser(item);
+    validatePrivateUser(item);
   });
 }
 
-function validateUser(obj) {
+function validatePublicUser(obj) {
   expect(obj.username).to.be.a('string');
+  expect(obj.age).to.be.a('number');
+}
+
+function validatePrivateUser(obj) {
+  expect(obj.username).to.be.a('string');
+  expect(obj.password).to.be.a('string');
   expect(obj.age).to.be.a('number');
 }
 
@@ -52,23 +58,49 @@ describe('api', function() {
       .expect('Content-Type', 'application/json; charset=utf-8')
       .end(function(err, res) {
         expect(err).to.be.null;
-        validateUser(res.body.user);
+        validatePublicUser(res.body.user);
         done();
       });
   });
 
   it('should retrieve a user for authenticated retrieval of user', function(done) {
     const userUrl = `/api/users/mark`;
-    request(app)
-      .get(userUrl)
-      .set('Accept', 'application/json')
-      .expect(200)
-      .expect('Content-Type', 'application/json; charset=utf-8')
-      .end(function(err, res) {
-        expect(err).to.be.null;
-        validateUser(res.body.user);
-        done();
-      });
+    async.waterfall([
+      // Get an auth token
+      function(callback) {
+        const authUrl = `/api/authentications`;
+        request(app)
+          .post(authUrl)
+          .set('Accept', 'application/json')
+          .set('Authorization', `Basic ${encodeCredentials(username, password)}`)
+          .expect(201)
+          .end(function(err, res) {
+            if (err) {
+              return callback(err);
+            }
+            return callback(null, res.body.token);
+          });
+      },
+      // Retrieve the users
+      function(token, callback) {
+        request(app)
+          .get(userUrl)
+          .set('Accept', 'application/json')
+          .set('Authorization', `Token ${token}`)
+          .expect(200)
+          .expect('Content-Type', 'application/json; charset=utf-8')
+          .end(function(err, res) {
+            if (err) {
+              return callback(err);
+            }
+            return callback(null, res.body.user);
+          });
+      }
+    ], function(err, results) {
+      expect(err).to.be.null;
+      validatePrivateUser(results);
+      done();
+    });
   });
 
   it('should 403 for unauthenticated retrieval of users', function(done) {
@@ -107,12 +139,12 @@ describe('api', function() {
             if (err) {
               return callback(err);
             }
-            return callback(null, res.body);
+            return callback(null, res.body.users);
           });
       }
     ], function(err, results) {
       expect(err).to.be.null;
-      validateListOfUsers(results.users);
+      validateListOfUsers(results);
       done();
     });
   });
