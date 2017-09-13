@@ -52,9 +52,7 @@ app.use('/api', require('./lib/routes/api'));
 if (app.get('env') !== 'production') {
   app.use(function(err, req, res, next) {
     console.log(err.stack);
-
     res.status(err.status || 500);
-
     return res.json({
       errors: [{
         message: err.message,
