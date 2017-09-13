@@ -20,6 +20,7 @@ function validateListOfUsers(list) {
 function validatePublicUser(obj) {
   expect(obj.username).to.be.a('string');
   expect(obj.age).to.be.a('number');
+  expect(obj.password).to.be.undefined;
 }
 
 function validatePrivateUser(obj) {
