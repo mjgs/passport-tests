@@ -19,7 +19,10 @@ module.exports = app;
 const passport = require('./lib/setup').passport;
 const middleware = require('./lib/middleware');
 
-app.use(logger('dev'));
+if (app.get('env') !== 'test') {
+  app.use(logger('dev'));
+}
+
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 app.engine('ejs', engine);
