@@ -33,7 +33,7 @@ issues in other apps.
   functions don't need to set many variables
 - The login form implements csrf protection using
   [csurf](https://github.com/expressjs/csurf)
-- Use a fake db implemented using a simple javascript object
+- Uses a fake db implemented using a simple javascript object
   (lib/users.js)
 
 ## Installation
