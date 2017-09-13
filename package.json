@@ -5,7 +5,8 @@
   "main": "app.js",
   "scripts": {
     "start": "node bin/website",
-    "test": "mocha test",
+    "test": "mocha test 2> /dev/null",
+    "test:dev": "mocha test",
     "test:watch": "mocha --watch test",
     "lint": "eslint --ignore-path .gitignore .",
     "lint:watch": "esw -w --ignore-path .gitignore .",
@@ -29,6 +30,7 @@
     "path": "^0.12.7"
   },
   "devDependencies": {
+    "async": "^2.5.0",
     "chai": "^4.1.2",
     "cheerio": "^1.0.0-rc.2",
     "eslint": "^4.6.1",
