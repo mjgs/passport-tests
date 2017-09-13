@@ -54,10 +54,10 @@ if (app.get('env') !== 'production') {
     console.log(err.stack);
     res.status(err.status || 500);
     return res.json({
-      errors: [{
+      errors: {
         message: err.message,
         error: err
-      }]
+      }
     });
   });
 }
@@ -67,9 +67,9 @@ if (app.get('env') !== 'production') {
 app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.json({
-    errors: [{
+    errors: {
       message: err.message,
       error: {}
-    }]
+    }
   });
 });
