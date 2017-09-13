@@ -1,15 +1,27 @@
 # Express app with passport authentication
 
 It's often difficult to troubleshoot authentication issues. This app
-just implements [passport](http://passportjs.org/) local authentication,
-only the basics. A home page, login page and user profile page and a
-logout route.
+just implements the [passport](http://passportjs.org/) basics on a
+minimal website and api.
+
+The website:
+
+- home page
+- login page
+- user profile page
+- logout route
+
+The api:
+
+- /api/authentications - get a jwt auth token (basic auth required)
+- /api/users           - get users            (jwt auth required)
+- /api/users/:username - get user             (jwt auth optional)
 
 It's a good starting point to test out other passport authentication strategies,
 and also a good minimal example to help troubleshooting authentication
 issues in other apps.
 
-## Notes
+## Notes on the website
 
 - Authentication state is stored in the session (see processLogin controller)
 - Only the profile page requires authentication to view
@@ -21,7 +33,7 @@ issues in other apps.
   functions don't need to set many variables
 - The login form implements csrf protection using
   [csurf](https://github.com/expressjs/csurf)
-- Use a fake db implemented using a simple javascript object
+- Uses a fake db implemented using a simple javascript object
   (lib/users.js)
 
 ## Installation

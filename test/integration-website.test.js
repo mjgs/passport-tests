@@ -1,4 +1,8 @@
-const app = require('../index');
+/* eslint-env mocha */
+/* eslint-disable no-unused-expressions */
+process.env.NODE_ENV = 'test';
+
+const app = require('../app');
 const request = require('supertest');
 const expect = require('chai').expect;
 const cheerio = require('cheerio');
@@ -79,7 +83,7 @@ function hasLoginForm($) {
   expect(form.find('button')[0].attribs.type).to.be.equal('submit');
 }
 
-describe('Integration tests: authenticated', function() {
+describe('website: authenticated', function() {
   let agent;
 
   // Log the user in
@@ -193,6 +197,7 @@ describe('Integration tests: authenticated', function() {
     // User should be logged in
     const pageUrl = `/login`;
     loadFormCsrf(agent, pageUrl, function(err, csrfToken) {
+      expect(err).to.be.null;
       agent
         .post(pageUrl)
         .send({ username: 'mark', password: 'password1', _csrf: csrfToken })
@@ -316,7 +321,7 @@ describe('Integration tests: authenticated', function() {
   });
 });
 
-describe('Integration tests: non-authenticated', function() {
+describe('website: unauthenticated', function() {
   it('should render the home page', function(done) {
     // Page displays text 'Logged in: false'
     // Page displays text 'This is the home page'
