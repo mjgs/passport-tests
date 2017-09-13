@@ -47,4 +47,31 @@ app.use(middleware.setVariables([
 app.use('/', require('./lib/routes/website'));
 app.use('/api', require('./lib/routes/api'));
 
-app.use(middleware.handleError);
+// development error handler
+// will print stacktrace
+if (app.get('env') !== 'production') {
+  app.use(function(err, req, res, next) {
+    console.log(err.stack);
+
+    res.status(err.status || 500);
+
+    return res.json({
+      'errors': {
+        message: err.message,
+        error: err
+      }
+    });
+  });
+}
+
+// production error handler
+// no stacktraces leaked to user
+app.use(function(err, req, res, next) {
+  res.status(err.status || 500);
+  res.json({
+    'errors': {
+      message: err.message,
+      error: {}
+    }
+  });
+});
