@@ -23,13 +23,13 @@ issues in other apps.
 
 ## Notes on the website
 
-- Authentication state is stored in the session (see processLogin controller)
+- Authentication state is stored in the session (see POST /login route)
 - Only the profile page requires authentication to view
 - App global variables are stored using express app.set
 - Run time app variables are stored in the session
 - Any app variables or session variables that are needed by templates
   are set using the setVariables middleware on a route by route basis
-- If you use the setVariables middleware correctly then the controller
+- If you use the setVariables middleware correctly then the route handler
   functions don't need to set many variables
 - The login form implements csrf protection using
   [csurf](https://github.com/expressjs/csurf)
