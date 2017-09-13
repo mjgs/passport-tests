@@ -16,7 +16,7 @@ app.set('secret', (app.get('env') === 'production') ? process.env.SECRET : 'secr
 
 module.exports = app;
 
-const passport = require('./lib/setup').passport;
+const passport = require('./lib/setup').passport();
 const middleware = require('./lib/middleware');
 
 if (app.get('env') !== 'test') {
