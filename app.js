@@ -1,4 +1,4 @@
-const debug = require('debug')('index');
+const debug = require('debug')('app'); // eslint-disable-line no-unused-vars
 const express = require('express');
 const session = require('express-session');
 const logger = require('morgan');
@@ -17,9 +17,7 @@ app.set('secret', (app.get('env') === 'production') ? process.env.SECRET : 'secr
 module.exports = app;
 
 const passport = require('./lib/setup').passport;
-const controllers = require('./lib/controllers');
 const middleware = require('./lib/middleware');
-const db = require('./lib/db');
 
 app.use(logger('dev'));
 app.set('views', path.join(__dirname, 'views'));

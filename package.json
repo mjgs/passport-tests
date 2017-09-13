@@ -2,10 +2,15 @@
   "name": "passport-tests",
   "version": "1.0.0",
   "description": "Express app that demonstrates a basic passport local flow.",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
     "start": "node bin/website",
-    "test": "mocha test"
+    "test": "mocha test",
+    "test:watch": "mocha --watch test",
+    "lint": "eslint --ignore-path .gitignore .",
+    "lint:watch": "esw -w --ignore-path .gitignore .",
+    "precommit": "npm run lint",
+    "prepush": "npm test"
   },
   "author": "Mark Smith",
   "license": "MIT",
@@ -26,6 +31,14 @@
   "devDependencies": {
     "chai": "^4.1.2",
     "cheerio": "^1.0.0-rc.2",
+    "eslint": "^4.6.1",
+    "eslint-config-standard": "^10.2.1",
+    "eslint-plugin-import": "^2.7.0",
+    "eslint-plugin-node": "^5.1.1",
+    "eslint-plugin-promise": "^3.5.0",
+    "eslint-plugin-standard": "^3.0.1",
+    "eslint-watch": "^3.1.2",
+    "husky": "^0.14.3",
     "mocha": "^3.5.0",
     "supertest": "^3.0.0"
   }

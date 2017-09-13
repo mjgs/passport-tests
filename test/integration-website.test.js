@@ -1,4 +1,6 @@
-const app = require('../index');
+/* eslint-env mocha */
+/* eslint-disable no-unused-expressions */
+const app = require('../app');
 const request = require('supertest');
 const expect = require('chai').expect;
 const cheerio = require('cheerio');
@@ -193,6 +195,7 @@ describe('Integration tests: website: authenticated', function() {
     // User should be logged in
     const pageUrl = `/login`;
     loadFormCsrf(agent, pageUrl, function(err, csrfToken) {
+      expect(err).to.be.null;
       agent
         .post(pageUrl)
         .send({ username: 'mark', password: 'password1', _csrf: csrfToken })

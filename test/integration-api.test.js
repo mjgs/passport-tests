@@ -1,9 +1,11 @@
-const app = require('../index');
+/* eslint-env mocha */
+/* eslint-disable no-unused-expressions */
+const app = require('../app');
 const request = require('supertest');
 const expect = require('chai').expect;
 
 function encodeCredentials(username, password) {
-  return new Buffer(`${username}:${password}`).toString('base64');
+  return Buffer.alloc(`${username}:${password}`).toString('base64');
 }
 
 function validateListOfUsers(list) {
