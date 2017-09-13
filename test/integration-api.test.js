@@ -71,7 +71,7 @@ describe('api', function() {
       });
   });
 
-  it('should return 403 for unauthenticated retrieval of users', function(done) {
+  it('should 403 for unauthenticated retrieval of users', function(done) {
     const usersUrl = `/api/users`;
     request(app)
       .get(usersUrl)
