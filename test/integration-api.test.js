@@ -104,12 +104,12 @@ describe('api', function() {
     });
   });
 
-  it('should 403 for unauthenticated retrieval of users', function(done) {
+  it('should 401 for unauthenticated retrieval of users', function(done) {
     const usersUrl = `/api/users`;
     request(app)
       .get(usersUrl)
       .set('Accept', 'application/json')
-      .expect(403)
+      .expect(401)
       .end(done);
   });
 
