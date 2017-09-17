@@ -87,7 +87,7 @@ describe('api', function() {
         request(app)
           .get(userUrl)
           .set('Accept', 'application/json')
-          .set('Authorization', `Token ${token}`)
+          .set('Authorization', `Bearer ${token}`)
           .expect(200)
           .expect('Content-Type', 'application/json; charset=utf-8')
           .end(function(err, res) {
@@ -135,7 +135,7 @@ describe('api', function() {
         request(app)
           .get(usersUrl)
           .set('Accept', 'application/json')
-          .set('Authorization', `Token ${token}`)
+          .set('Authorization', `Bearer ${token}`)
           .end(function(err, res) {
             if (err) {
               return callback(err);
