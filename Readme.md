@@ -34,7 +34,7 @@ issues in other apps.
 - The login form implements csrf protection using
   [csurf](https://github.com/expressjs/csurf)
 - Uses a fake db implemented using a simple javascript object
-  (lib/users.js)
+  (lib/store/users.js)
 
 ## Installation
 
