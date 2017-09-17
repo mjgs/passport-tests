@@ -16,7 +16,8 @@ app.set('secret', (app.get('env') === 'production') ? process.env.SECRET : 'secr
 
 module.exports = app;
 
-const passport = require('./lib/setup').passport();
+const setup = require('./lib/setup');
+const passport = setup.passport();
 const middleware = require('./lib/middleware');
 
 if (app.get('env') !== 'test') {
@@ -56,7 +57,8 @@ if (app.get('env') !== 'production') {
     return res.json({
       errors: {
         message: err.message,
-        error: err
+        status: err.status,
+        data: setup.util.processError(err)
       }
     });
   });
@@ -69,7 +71,8 @@ app.use(function(err, req, res, next) {
   return res.json({
     errors: {
       message: err.message,
-      error: {}
+      status: err.status,
+      data: {}
     }
   });
 });
