@@ -33,120 +33,130 @@ describe('api', function() {
   const username = 'mark';
   const password = 'password1';
 
-  it('should authenticate to get an auth token', function(done) {
-    const authUrl = `/api/authentications`;
-    request(app)
-      .post(authUrl)
-      .set('Accept', 'application/json')
-      .expect(201)
-      .set('Authorization', `Basic ${encodeCredentials(username, password)}`)
-      .expect('Content-Type', 'application/json; charset=utf-8')
-      .end(function(err, res) {
-        expect(err).to.be.null;
-        expect(res.body.token).to.be.a('string');
-        expect(res.body.user).to.be.an('object');
-        done();
-      });
-  });
-
-  it('should retrieve a user for unauthenticated retrieval of user', function(done) {
-    const userUrl = `/api/users/mark`;
-    request(app)
-      .get(userUrl)
-      .set('Accept', 'application/json')
-      .set('Authorization', `Basic ${encodeCredentials(username, password)}`)
-      .expect(200)
-      .expect('Content-Type', 'application/json; charset=utf-8')
-      .end(function(err, res) {
-        expect(err).to.be.null;
-        validatePublicUser(res.body.user);
-        done();
-      });
-  });
-
-  it('should retrieve a user for authenticated retrieval of user', function(done) {
-    const userUrl = `/api/users/mark`;
-    async.waterfall([
-      // Get an auth token
-      function(callback) {
-        const authUrl = `/api/authentications`;
-        request(app)
-          .post(authUrl)
-          .set('Accept', 'application/json')
-          .set('Authorization', `Basic ${encodeCredentials(username, password)}`)
-          .expect(201)
-          .end(function(err, res) {
-            if (err) {
-              return callback(err);
-            }
-            return callback(null, res.body.token);
-          });
-      },
-      // Retrieve the users
-      function(token, callback) {
-        request(app)
-          .get(userUrl)
-          .set('Accept', 'application/json')
-          .set('Authorization', `Bearer ${token}`)
-          .expect(200)
-          .expect('Content-Type', 'application/json; charset=utf-8')
-          .end(function(err, res) {
-            if (err) {
-              return callback(err);
-            }
-            return callback(null, res.body.user);
-          });
-      }
-    ], function(err, results) {
-      expect(err).to.be.null;
-      validatePrivateUser(results);
-      done();
+  describe('authentication - success', function() {
+    it('should authenticate to get an auth token', function(done) {
+      const authUrl = `/api/authentications`;
+      request(app)
+        .post(authUrl)
+        .set('Accept', 'application/json')
+        .expect(201)
+        .set('Authorization', `Basic ${encodeCredentials(username, password)}`)
+        .expect('Content-Type', 'application/json; charset=utf-8')
+        .end(function(err, res) {
+          expect(err).to.be.null;
+          expect(res.body.token).to.be.a('string');
+          expect(res.body.user).to.be.an('object');
+          done();
+        });
     });
   });
 
-  it('should 401 for unauthenticated retrieval of users', function(done) {
-    const usersUrl = `/api/users`;
-    request(app)
-      .get(usersUrl)
-      .set('Accept', 'application/json')
-      .expect(401)
-      .end(done);
+  describe('authentication - fail', function() {
+
   });
 
-  it('should retrieve a list for users for authenticated retrieval of users', function(done) {
-    const usersUrl = `/api/users`;
-    async.waterfall([
-      // Get an auth token
-      function(callback) {
-        const authUrl = `/api/authentications`;
-        request(app)
-          .post(authUrl)
-          .set('Accept', 'application/json')
-          .set('Authorization', `Basic ${encodeCredentials(username, password)}`)
-          .end(function(err, res) {
-            if (err) {
-              return callback(err);
-            }
-            return callback(null, res.body.token);
-          });
-      },
-      // Retrieve the users
-      function(token, callback) {
-        request(app)
-          .get(usersUrl)
-          .set('Accept', 'application/json')
-          .set('Authorization', `Bearer ${token}`)
-          .end(function(err, res) {
-            if (err) {
-              return callback(err);
-            }
-            return callback(null, res.body.users);
-          });
-      }
-    ], function(err, results) {
-      expect(err).to.be.null;
-      validateListOfUsers(results);
-      done();
+  describe('users - success', function() {
+    it('should retrieve a user for unauthenticated retrieval of user', function(done) {
+      const userUrl = `/api/users/mark`;
+      request(app)
+        .get(userUrl)
+        .set('Accept', 'application/json')
+        .set('Authorization', `Basic ${encodeCredentials(username, password)}`)
+        .expect(200)
+        .expect('Content-Type', 'application/json; charset=utf-8')
+        .end(function(err, res) {
+          expect(err).to.be.null;
+          validatePublicUser(res.body.user);
+          done();
+        });
+    });
+
+    it('should retrieve a user for authenticated retrieval of user', function(done) {
+      const userUrl = `/api/users/mark`;
+      async.waterfall([
+        // Get an auth token
+        function(callback) {
+          const authUrl = `/api/authentications`;
+          request(app)
+            .post(authUrl)
+            .set('Accept', 'application/json')
+            .set('Authorization', `Basic ${encodeCredentials(username, password)}`)
+            .expect(201)
+            .end(function(err, res) {
+              if (err) {
+                return callback(err);
+              }
+              return callback(null, res.body.token);
+            });
+        },
+        // Retrieve the users
+        function(token, callback) {
+          request(app)
+            .get(userUrl)
+            .set('Accept', 'application/json')
+            .set('Authorization', `Bearer ${token}`)
+            .expect(200)
+            .expect('Content-Type', 'application/json; charset=utf-8')
+            .end(function(err, res) {
+              if (err) {
+                return callback(err);
+              }
+              return callback(null, res.body.user);
+            });
+        }
+      ], function(err, results) {
+        expect(err).to.be.null;
+        validatePrivateUser(results);
+        done();
+      });
+    });
+
+    it('should retrieve a list for users for authenticated retrieval of users', function(done) {
+      const usersUrl = `/api/users`;
+      async.waterfall([
+        // Get an auth token
+        function(callback) {
+          const authUrl = `/api/authentications`;
+          request(app)
+            .post(authUrl)
+            .set('Accept', 'application/json')
+            .set('Authorization', `Basic ${encodeCredentials(username, password)}`)
+            .end(function(err, res) {
+              if (err) {
+                return callback(err);
+              }
+              return callback(null, res.body.token);
+            });
+        },
+        // Retrieve the users
+        function(token, callback) {
+          request(app)
+            .get(usersUrl)
+            .set('Accept', 'application/json')
+            .set('Authorization', `Bearer ${token}`)
+            .end(function(err, res) {
+              if (err) {
+                return callback(err);
+              }
+              return callback(null, res.body.users);
+            });
+        }
+      ], function(err, results) {
+        expect(err).to.be.null;
+        validateListOfUsers(results);
+        done();
+      });
+    });
+  });
+
+  describe('users - fail', function() {
+    it('should 401 for unauthenticated retrieval of users', function(done) {
+      const usersUrl = `/api/users`;
+      request(app)
+        .get(usersUrl)
+        .set('Accept', 'application/json')
+        .expect(401)
+        .end(done);
     });
   });
 });
