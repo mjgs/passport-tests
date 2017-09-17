@@ -14,8 +14,8 @@ The website:
 The api:
 
 - /api/authentications - get a jwt auth token (basic auth required)
-- /api/users           - get users            (jwt auth required)
-- /api/users/:username - get user             (jwt auth optional)
+- /api/users           - get users            (bearer auth required)
+- /api/users/:username - get user             (bearer auth optional)
 
 It's a good starting point to test out other passport authentication strategies,
 and also a good minimal example to help troubleshooting authentication
